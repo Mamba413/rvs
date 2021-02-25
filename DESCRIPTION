@@ -1,0 +1,22 @@
+Package: rvs
+Type: Package
+Title: Robust Variable Selection with Exponential Squared Loss
+Description: Computationally efficient tool for performing variable selection and obtaining robust estimates, which implements robust variable selection procedure proposed by Wang, X., Jiang, Y., Wang, S., Zhang, H. (2013) <doi:10.1080/01621459.2013.766613>. Users can enjoy the near optimal, consistent, and oracle properties of the procedures. 
+Version: 0.1.0
+Authors@R: c(
+    person("Borui", "Tang", email = "tangborui@mail.ustc.edu.cn", role = c("cre", "aut")),
+    person("Jin", "Zhu", email="zhuj37@mail2.sysu.edu.cn", role = "aut"),
+    person("Xueqin", "Wang", email="wangxq20@ustc.edu.cn", role = "aut"))
+Author: Borui Tang [cre, aut],
+  Jin Zhu [aut] (<https://orcid.org/0000-0001-8550-5822>),
+  Xueqin Wang [aut]
+Imports: MASS, matrixStats
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    covr
+VignetteBuilder: knitr

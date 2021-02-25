@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^README\.Rmd$
+^codecov\.yml$
+rvs.zip
+rvs_0.1.0.tar.gz
+.Rhistory
+.RData
