@@ -5,8 +5,8 @@ Description: Computationally efficient tool for performing variable selection an
 Version: 0.1.0
 Authors@R: c(
     person("Borui", "Tang", email = "tangborui@mail.ustc.edu.cn", role = c("cre", "aut")),
-    person("Jin", "Zhu", email="zhuj37@mail2.sysu.edu.cn", role = "aut"),
-    person("Xueqin", "Wang", email="wangxq20@ustc.edu.cn", role = "aut"))
+    person("Jin", "Zhu", email = "zhuj37@mail2.sysu.edu.cn", role = "aut"),
+    person("Xueqin", "Wang", email = "wangxq20@ustc.edu.cn", role = "aut"))
 Author: Borui Tang [cre, aut],
   Jin Zhu [aut] (<https://orcid.org/0000-0001-8550-5822>),
   Xueqin Wang [aut]
