@@ -1,23 +1,29 @@
 #' @title Robust variable selection with exponential squared loss
 #'
 #' @description \code{rvs} carries out robust variable selection with exponential squared loss. 
-#' A block coordinate gradient descent is implemented to minimize the loss function.
+#' A block coordinate gradient descent algorithm is used to minimize the loss function.
 #'
-#' @param x input matrix; each row is an observation vector.
-#' @param y response variable.
-#' @param gamma tuning parameter in the loss function.
-#' The loss function defined as \deqn{1-exp(-t^2/\gamma)}
-#' @param lambda regularization parameters in the penalty.
+#' @param x Input matrix, of dimension nobs * nvars; each row is an observation vector. Should be in matrix format.
+#' @param y Response variable. Should be a numerical vector or matrix with a singal column.
+#' @param gamma Tuning parameter in the loss function, which controls the degree of robustness and efficiency of the regression estimators.
+#' The loss function is defined as \deqn{1-exp(-t^2/\gamma).}
+#' When \code{gamma} is large, the estimators are similar to the least squares estimators
+#' in the extreme case. A smaller \code{gamma} would limit the influence of an outlier on the estimators, 
+#' although it could also reduce the sensitivity of the estimators. If \code{gamma=NULL}, it is selected by a
+#' data-driven procedure that yields both high robustness and high efficiency.
+#' @param lambda Regularization parameters in the penalty.
 #' The penalty is defined as \deqn{\lambda\sum_{j=1}^p weight_{j}|\beta_j|.}
-#' @param weight If \code{weight=NULL},
+#' @param weight Weight in the penalty. If \code{weight=NULL} (by default),
 #' it is set to be \eqn{(log(n))/(n|\tilde{\beta}_j|),}
-#' where \eqn{\tilde{\beta}} is an initial estimator.
-#' If also \code{lambda=1}(by default),
+#' where \eqn{\tilde{\beta}} is a numeric vector, which is an
+#'  initial estimator of regression coefficients obtained by an MM procedure.
+#' If also \code{lambda=1} (by default),
 #' the parameters meet a BIC-type criterion.
-#' @param intercept should intercepts be fitted(TRUE) or set to zero(FALSE)
+#' @param intercept Should intercepts be fitted (TRUE) or set to zero (FALSE)
 #'
 #'
 #' @return A numerical vector \code{beta}, which is the estimated regression coefficients.
+#' If \code{intercept=TRUE}, it also contains the intercept as the first component.
 #'
 #' @details \code{rvs} solves the following optimization problem to obtain robust estimators of regression coefficients:
 #' \deqn{argmin_{\beta} \sum_{i=1}^n(1-exp{-(y_i-x_i^T\beta)^2/\gamma_n})+n\sum_{i=1}^d p_{\lambda_{nj}(|\beta_j|)}.}
@@ -58,7 +64,7 @@
 #'
 rvs <- function(x, y, gamma = NULL,
                 lambda = 1, weight = NULL,
-                intercept = FALSE) {
+                intercept = TRUE) {
   obs <- nrow(x)
   if (isTRUE(intercept)) {
     x <- cbind(rep(1, obs), x)
@@ -68,7 +74,7 @@ rvs <- function(x, y, gamma = NULL,
 
   # compute beta0 (initial estimate)
   data_all <- data.frame(res, data)
-  rlmb <- MASS::rlm(res ~ . - 1, data = data_all, method = "MM")
+  rlmb <- suppressWarnings(MASS::rlm(res ~ . - 1, data = data_all, method = "MM")) 
   beta0 <- rlmb$coefficients
 
   if (is.null(gamma)) {
@@ -87,7 +93,7 @@ rvs <- function(x, y, gamma = NULL,
       obj <- 2 * m / n + sum(rho[-c(index)]) * 2 / n
       return(obj)
     }
-    gamma_1 <- seq(0.1, 4.5, by = 0.2)
+    gamma_1 <- seq(0.1, 10, by = 0.2)
     a_gamma <- sapply(gamma_1, function(x) zeta(x))
     index_1 <- which(a_gamma <= 1)
     gamma_2 <- gamma_1[index_1]
@@ -172,7 +178,7 @@ rvs <- function(x, y, gamma = NULL,
         newobjf <- fnc(data, res, x + step * d, gamma)
         nf <- nf + 1
         if (step < 1e-30) {
-          print("CGD stepsize small! Check roundoff error in newobj-obj")
+          # print("CGD stepsize small! Check roundoff error in newobj-obj")
           stop <- 1
           break
         }
@@ -251,7 +257,7 @@ rvs <- function(x, y, gamma = NULL,
           newobjf <- fnc(data, res, x + stepl * d, gamma)
 
           if (stepl < 1e-30) {
-            cat("L-BFGS stepsize small! Check roundoff error in newobj-obj.\n")
+            # cat("L-BFGS stepsize small! Check roundoff error in newobj-obj.\n")
             stop <- 1
             break
           }

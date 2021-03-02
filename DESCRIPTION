@@ -9,7 +9,7 @@ Authors@R: c(
     person("Xueqin", "Wang", email = "wangxq20@ustc.edu.cn", role = "aut"))
 Author: Borui Tang [cre, aut],
   Jin Zhu [aut] (<https://orcid.org/0000-0001-8550-5822>),
-  Xueqin Wang [aut]
+  Xueqin Wang [aut] (<https://orcid.org/0000-0001-5205-9950>)
 Imports: MASS, matrixStats
 License: GPL-3
 Encoding: UTF-8

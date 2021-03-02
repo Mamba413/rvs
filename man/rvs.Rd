@@ -4,33 +4,39 @@
 \alias{rvs}
 \title{Robust variable selection with exponential squared loss}
 \usage{
-rvs(x, y, gamma = NULL, lambda = 1, weight = NULL, intercept = FALSE)
+rvs(x, y, gamma = NULL, lambda = 1, weight = NULL, intercept = TRUE)
 }
 \arguments{
-\item{x}{input matrix; each row is an observation vector.}
+\item{x}{Input matrix, of dimension nobs * nvars; each row is an observation vector. Should be in matrix format.}
 
-\item{y}{response variable.}
+\item{y}{Response variable. Should be a numerical vector or matrix with a singal column.}
 
-\item{gamma}{tuning parameter in the loss function.
-The loss function defined as \deqn{1-exp(-t^2/\gamma)}}
+\item{gamma}{Tuning parameter in the loss function, which controls the degree of robustness and efficiency of the regression estimators.
+The loss function is defined as \deqn{1-exp(-t^2/\gamma).}
+When \code{gamma} is large, the estimators are similar to the least squares estimators
+in the extreme case. A smaller \code{gamma} would limit the influence of an outlier on the estimators, 
+although it could also reduce the sensitivity of the estimators. If \code{gamma=NULL}, it is selected by a
+data-driven procedure that yields both high robustness and high efficiency.}
 
-\item{lambda}{regularization parameters in the penalty.
+\item{lambda}{Regularization parameters in the penalty.
 The penalty is defined as \deqn{\lambda\sum_{j=1}^p weight_{j}|\beta_j|.}}
 
-\item{weight}{If \code{weight=NULL},
+\item{weight}{Weight in the penalty. If \code{weight=NULL} (by default),
 it is set to be \eqn{(log(n))/(n|\tilde{\beta}_j|),}
-where \eqn{\tilde{\beta}} is an initial estimator.
-If also \code{lambda=1}(by default),
+where \eqn{\tilde{\beta}} is a numeric vector, which is an
+ initial estimator of regression coefficients obtained by an MM procedure.
+If also \code{lambda=1} (by default),
 the parameters meet a BIC-type criterion.}
 
-\item{intercept}{should intercepts be fitted(TRUE) or set to zero(FALSE)}
+\item{intercept}{Should intercepts be fitted (TRUE) or set to zero (FALSE)}
 }
 \value{
 A numerical vector \code{beta}, which is the estimated regression coefficients.
+If \code{intercept=TRUE}, it also contains the intercept as the first component.
 }
 \description{
 \code{rvs} carries out robust variable selection with exponential squared loss. 
-A block coordinate gradient descent is implemented to minimize the loss function.
+A block coordinate gradient descent algorithm is used to minimize the loss function.
 }
 \details{
 \code{rvs} solves the following optimization problem to obtain robust estimators of regression coefficients:
