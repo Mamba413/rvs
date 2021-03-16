@@ -4,7 +4,7 @@
 \alias{rvs}
 \title{Robust variable selection with exponential squared loss}
 \usage{
-rvs(x, y, gamma = NULL, lambda = 1, weight = NULL, intercept = TRUE)
+rvs(x, y, gamma = NULL, weight = NULL, intercept = TRUE)
 }
 \arguments{
 \item{x}{Input matrix, of dimension nobs * nvars; each row is an observation vector. Should be in matrix format.}
@@ -18,21 +18,20 @@ in the extreme case. A smaller \code{gamma} would limit the influence of an outl
 although it could also reduce the sensitivity of the estimators. If \code{gamma=NULL}, it is selected by a
 data-driven procedure that yields both high robustness and high efficiency.}
 
-\item{lambda}{Regularization parameters in the penalty.
-The penalty is defined as \deqn{\lambda\sum_{j=1}^p weight_{j}|\beta_j|.}}
-
-\item{weight}{Weight in the penalty. If \code{weight=NULL} (by default),
+\item{weight}{Weight in the penalty. The penalty is given by \deqn{n\sum_{j=1}^d\lambda_{n j}|\beta_{j}|.} \code{weight} is a vector consisting of \eqn{\lambda_{n j}}s. If \code{weight=NULL} (by default),
 it is set to be \eqn{(log(n))/(n|\tilde{\beta}_j|),}
 where \eqn{\tilde{\beta}} is a numeric vector, which is an
- initial estimator of regression coefficients obtained by an MM procedure.
-If also \code{lambda=1} (by default),
-the parameters meet a BIC-type criterion.}
+initial estimator of regression coefficients obtained by an MM procedure. The default value meets a BIC-type criterion (See Details).}
 
 \item{intercept}{Should intercepts be fitted (TRUE) or set to zero (FALSE)}
 }
 \value{
-A numerical vector \code{beta}, which is the estimated regression coefficients.
-If \code{intercept=TRUE}, it also contains the intercept as the first component.
+An object with S3 class "rvs", which is a \code{list} with the following components:
+\item{beta}{The regression coefficients.}
+\item{alpha}{The intercept.}
+\item{gamma}{The tuning parameter used in the loss.}
+\item{weight}{The regularization parameters.}
+\item{loss}{Value of the loss function calculated on the training set.}
 }
 \description{
 \code{rvs} carries out robust variable selection with exponential squared loss. 
@@ -40,9 +39,11 @@ A block coordinate gradient descent algorithm is used to minimize the loss funct
 }
 \details{
 \code{rvs} solves the following optimization problem to obtain robust estimators of regression coefficients:
-\deqn{argmin_{\beta} \sum_{i=1}^n(1-exp{-(y_i-x_i^T\beta)^2/\gamma_n})+n\sum_{i=1}^d p_{\lambda_{nj}(|\beta_j|)}.}
-We use the adaptive LASSO penalty. Regularization parameters are chosen adaptively by default, while they can be supplied by the user.
-Block coordinate gradient descent algorithm is used to efficiently solve the optimiztion problem.
+\deqn{argmin_{\beta} \sum_{i=1}^n(1-exp{-(y_i-x_i^T\beta)^2/\gamma_n})+n\sum_{i=1}^d p_{\lambda_{nj}}(|\beta_j|),}
+where \eqn{p_{\lambda_{n j}}(|\beta_{j}|)=\lambda_{n j}|\beta_{j}|} is the adaptive LASSO penalty. Block coordinate gradient descent algorithm is used to efficiently solve the optimiztion problem. 
+The tuning parameter \code{gamma} and regularization parameter \code{weight} are chosen adaptively by default, while they can be supplied by the user.
+Specifically, the default \code{weight} meets the following BIC-type criterion: 
+\deqn{min_{\tau_n} \sum_{i=1}^{n}[1-exp {-(Y_i-x_i^T} {\beta})^{2} / \gamma_{n}]+n \sum_{j=1}^{d} \tau_{n j}|\beta_j| /|\tilde{\beta}_{n j}|-\sum_{j=1}^{d} \log (0.5 n \tau_{n j}) \log (n).}
 }
 \examples{
 library(MASS)

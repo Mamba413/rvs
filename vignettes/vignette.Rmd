@@ -11,14 +11,15 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>", 
+  warning = FALSE
 )
 ```
 
-The goal of rvs is to carry out robust variable selection through exponential sqared loss. Specifically, it solves the following optimization problem: 
+The goal of the **rvs** package is to carry out robust variable selection through exponential squared loss. Specifically, it solves the following optimization problem: 
 
 \[
-argmin_{\beta} \sum_{i=1}^n(1-exp{-(y_i-x_i^T\beta)^2/\gamma_n})+n\sum_{i=1}^d p_{\lambda_{nj}(|\beta_j|)}.
+\arg\min_{\beta} \sum_{i=1}^n(1-exp{-(y_i-x_i^T\beta)^2/\gamma_n})+n\sum_{i=1}^d p_{\lambda_{nj}(|\beta_j|)}.
 \]
 
 We use the adaptive LASSO penalty. Regularization parameters are chosen adaptively by default, while they can be supplied by the user. Block coordinate gradient descent algorithm is used to efficiently solve the optimiztion problem.
@@ -34,13 +35,10 @@ We use the adaptive LASSO penalty. Regularization parameters are chosen adaptive
 ## Quick Start
 
 This is a basic example which shows you how to use this package:
+We generate a dataset in which the response variable is contaminated: 
 
 ```{r example}
 library(MASS)
-library(rvs)
-## basic example code
-
-#### generate data
 set.seed(1)
 N <- 100
 p <- 8
@@ -54,37 +52,52 @@ X <- mvrnorm(N, mu, Sigma)
 Z <- rnorm(N, 0, 1)
 k <- sqrt(var(X %*% beta) / (3 * var(Z)))
 Y <- X %*% beta + drop(k) * Z
-
-#### apply rvs
-rvs(X, Y)
 ```
+
+We apply *rvs* function to select important variables:
+```{r}
+library(rvs)
+rvs1 <- rvs(X, Y)
+print(rvs1)
+```
+
+**rvs** package provides generic *predict* function to make a prediction:
+```{r}
+Y_pred <- predict(rvs1, X)
+head(Y_pred)
+```
+
 
 ## Boston Housing Price Dataset
 We apply this package to analysis the Boston Housing Price Dataset, which is available in 'MASS' package. The data contain 14 variables medv. There are 506 observations in the dataset. The response variable is medv (median value of owneroccupied homes in thousand dollars), and the rest are the predictors. Here the predictors are scaled to have zero mean and unit variance. The responses are centerized.
 ```{r}
-library(MASS)
-data(Boston)
-Boston[, -14] <- scale(Boston[, -14])
-Boston[, 14] <- scale(Boston[, 14], scale = FALSE)
+data(Boston, package = "MASS")
 head(Boston)
 ```
 
 ```{r}
-# comparison with OLS and MM estimators
+Boston[, -14] <- scale(Boston[, -14])
+Boston[, 14] <- scale(Boston[, 14], scale = FALSE)
+```
+
+```{r}
+# diagnostic
 set.seed(1)
 x <- as.matrix(Boston[, -14])
 y <- Boston[, 14]
-lm_OLS <- lm(y~x-1)
-beta_OLS <- lm_OLS$coefficients
-rlmb <- rlm(y~x-1 , method = "MM") 
-beta_MM <- rlmb$coefficients
-beta_rvs <- rvs(x, y)
-
-beta_OLS
-beta_MM
-beta_rvs
+lm_OLS <- lm(y ~ x - 1)
+plot(lm_OLS)
 ```
 
+The diagnostic plots suggest the residuals may not follow normal distribution, we use \textit{rvs} to carry out variable selection with robustness.
+
+```{r}
+# rvs
+rvs2 <- rvs(x, y)
+rvs2
+```
+
+In this example, rvs selected seven of the predictors while discarding six of them.
 
 
 
