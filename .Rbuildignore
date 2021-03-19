@@ -6,3 +6,4 @@ rvs.zip
 rvs_0.1.0.tar.gz
 .Rhistory
 .RData
+^cran-comments\.md$

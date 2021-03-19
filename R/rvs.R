@@ -4,7 +4,7 @@
 #' A block coordinate gradient descent algorithm is used to minimize the loss function.
 #'
 #' @param x Input matrix, of dimension nobs * nvars; each row is an observation vector. Should be in matrix format.
-#' @param y Response variable. Should be a numerical vector or matrix with a singal column.
+#' @param y Response variable. Should be a numerical vector or matrix with a single column.
 #' @param gamma Tuning parameter in the loss function, which controls the degree of robustness and efficiency of the regression estimators.
 #' The loss function is defined as \deqn{1-exp(-t^2/\gamma).}
 #' When \code{gamma} is large, the estimators are similar to the least squares estimators
@@ -26,7 +26,7 @@
 #' \item{loss}{Value of the loss function calculated on the training set.}
 #' @details \code{rvs} solves the following optimization problem to obtain robust estimators of regression coefficients:
 #' \deqn{argmin_{\beta} \sum_{i=1}^n(1-exp{-(y_i-x_i^T\beta)^2/\gamma_n})+n\sum_{i=1}^d p_{\lambda_{nj}}(|\beta_j|),}
-#' where \eqn{p_{\lambda_{n j}}(|\beta_{j}|)=\lambda_{n j}|\beta_{j}|} is the adaptive LASSO penalty. Block coordinate gradient descent algorithm is used to efficiently solve the optimiztion problem. 
+#' where \eqn{p_{\lambda_{n j}}(|\beta_{j}|)=\lambda_{n j}|\beta_{j}|} is the adaptive LASSO penalty. Block coordinate gradient descent algorithm is used to efficiently solve the optimization problem. 
 #' The tuning parameter \code{gamma} and regularization parameter \code{weight} are chosen adaptively by default, while they can be supplied by the user.
 #' Specifically, the default \code{weight} meets the following BIC-type criterion: 
 #' \deqn{min_{\tau_n} \sum_{i=1}^{n}[1-exp {-(Y_i-x_i^T} {\beta})^{2} / \gamma_{n}]+n \sum_{j=1}^{d} \tau_{n j}|\beta_j| /|\tilde{\beta}_{n j}|-\sum_{j=1}^{d} \log (0.5 n \tau_{n j}) \log (n).}
