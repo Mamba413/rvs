@@ -1,9 +1,9 @@
-#' Make predictions from a "esllasso" object.
+#' Make predictions from a "robustlm" object.
 #'
 #' Returns predictions from a fitted
-#' "\code{esllasso}" object.
+#' "\code{robustlm}" object.
 #'
-#' @param object Output from the \code{esllasso} function.
+#' @param object Output from the \code{robustlm} function.
 #' @param newx New data used for prediction
 #' @param ... Additional arguments affecting the predictions produced.
 #' 
@@ -11,7 +11,7 @@
 #' 
 #' @export
 #'
-predict.esllasso <- function(object, newx, ...) {
+predict.robustlm <- function(object, newx, ...) {
   if (missing(newx)) {
     stop("You need to supply a value for newx")
   }

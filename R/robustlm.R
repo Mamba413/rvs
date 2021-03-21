@@ -1,6 +1,6 @@
 #' @title Robust variable selection with exponential squared loss
 #'
-#' @description \code{esllasso} carries out robust variable selection with exponential squared loss. 
+#' @description \code{robustlm} carries out robust variable selection with exponential squared loss. 
 #' A block coordinate gradient descent algorithm is used to minimize the loss function.
 #'
 #' @param x Input matrix, of dimension nobs * nvars; each row is an observation vector. Should be in matrix format.
@@ -18,13 +18,13 @@
 #' @param intercept Should intercepts be fitted (TRUE) or set to zero (FALSE)
 #'
 #'
-#' @return An object with S3 class "esllasso", which is a \code{list} with the following components:
+#' @return An object with S3 class "robustlm", which is a \code{list} with the following components:
 #' \item{beta}{The regression coefficients.}
 #' \item{alpha}{The intercept.}
 #' \item{gamma}{The tuning parameter used in the loss.}
 #' \item{weight}{The regularization parameters.}
 #' \item{loss}{Value of the loss function calculated on the training set.}
-#' @details \code{esllasso} solves the following optimization problem to obtain robust estimators of regression coefficients:
+#' @details \code{robustlm} solves the following optimization problem to obtain robust estimators of regression coefficients:
 #' \deqn{argmin_{\beta} \sum_{i=1}^n(1-exp{-(y_i-x_i^T\beta)^2/\gamma_n})+n\sum_{i=1}^d p_{\lambda_{nj}}(|\beta_j|),}
 #' where \eqn{p_{\lambda_{n j}}(|\beta_{j}|)=\lambda_{n j}|\beta_{j}|} is the adaptive LASSO penalty. Block coordinate gradient descent algorithm is used to efficiently solve the optimization problem. 
 #' The tuning parameter \code{gamma} and regularization parameter \code{weight} are chosen adaptively by default, while they can be supplied by the user.
@@ -61,10 +61,10 @@
 #' Z <- rnorm(N, 0, 1)
 #' k <- sqrt(var(X %*% beta) / (3 * var(Z)))
 #' Y <- X %*% beta + drop(k) * Z
-#' esllasso(X, Y)
+#' robustlm(X, Y)
 #' @export
 #'
-esllasso <- function(x, y, gamma = NULL, weight = NULL,
+robustlm <- function(x, y, gamma = NULL, weight = NULL,
                 intercept = TRUE) {
   obs <- nrow(x)
   if (isTRUE(intercept)) {
@@ -399,7 +399,7 @@ esllasso <- function(x, y, gamma = NULL, weight = NULL,
     weight = weight,
     loss = loss
   )
-  class(result) <- "esllasso"
+  class(result) <- "robustlm"
   
   return(result)
 }

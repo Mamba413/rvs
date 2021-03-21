@@ -2,8 +2,8 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^codecov\.yml$
-esllasso.zip
-esllasso_0.1.0.tar.gz
+robustlm.zip
+robustlm_0.1.0.tar.gz
 .Rhistory
 .RData
 ^cran-comments\.md$

@@ -1,15 +1,15 @@
-#' Print method for a "esllasso" object
+#' Print method for a "robustlm" object
 #'
-#' Print the primary elements of the "\code{esllasso}" object.
+#' Print the primary elements of the "\code{robustlm}" object.
 #'
-#' @param x A "\code{esllasso}" object.
+#' @param x A "\code{robustlm}" object.
 #' @param ... Additional print arguments.
 #' 
-#' @return print a \code{esllasso} object.
+#' @return print a \code{robustlm} object.
 #' 
 #' @export
 #'
-print.esllasso <- function(x, ...){
+print.robustlm <- function(x, ...){
   out <- list(
     beta = x[["beta"]],
     alpha = x[["alpha"]],
