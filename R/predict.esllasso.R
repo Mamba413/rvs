@@ -1,9 +1,9 @@
-#' Make predictions from a "rvs" object.
+#' Make predictions from a "esllasso" object.
 #'
 #' Returns predictions from a fitted
-#' "\code{rvs}" object.
+#' "\code{esllasso}" object.
 #'
-#' @param object Output from the \code{rvs} function.
+#' @param object Output from the \code{esllasso} function.
 #' @param newx New data used for prediction
 #' @param ... Additional arguments affecting the predictions produced.
 #' 
@@ -11,7 +11,7 @@
 #' 
 #' @export
 #'
-predict.rvs <- function(object, newx, ...) {
+predict.esllasso <- function(object, newx, ...) {
   if (missing(newx)) {
     stop("You need to supply a value for newx")
   }

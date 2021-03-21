@@ -1,5 +1,5 @@
 ---
-title: "rvs: Robust Variable Selection with Exponential Squared Loss"
+title: "esllasso: Robust Variable Selection with Exponential Squared Loss"
 author: "Borui Tang, Jin Zhu"
 output: rmarkdown::html_vignette
 bibliography: ref.bib
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The goal of the **rvs** package is to carry out robust variable selection through exponential squared loss [@wangRobustVariableSelection2013]. Specifically, it solves the following optimization problem: 
+The goal of the **esllasso** package is to carry out robust variable selection through exponential squared loss [@wangRobustVariableSelection2013]. Specifically, it solves the following optimization problem: 
 
 \[
 \arg\min_{\beta} \sum_{i=1}^n(1-\exp\{-(y_i-x_i^T\beta)^2/\gamma_n\})+n\sum_{i=1}^d \lambda_{n j}|\beta_{j}|, 
@@ -31,10 +31,10 @@ $y_i$s are responses and $x_i$ are predictors. $\gamma_n$ is the tuning paramete
 
 <!-- ## Installation -->
 
-<!-- You can install the released version of rvs from [CRAN](https://CRAN.R-project.org) with: -->
+<!-- You can install the released version of esllasso from [CRAN](https://CRAN.R-project.org) with: -->
 
 <!-- ``` r -->
-<!-- install.packages("rvs") -->
+<!-- install.packages("esllasso") -->
 <!-- ``` -->
 
 ## Quick Start
@@ -65,18 +65,18 @@ Regression diagnostics for simple linear regression provide some intuition about
 plot(lm(Y ~ X))
 ```
 
-The Q-Q plot suggests the normal assumption is not valid. Thus, a robust variable selection procedure is needed. We apply *rvs* function to select important variables:
+The Q-Q plot suggests the normal assumption is not valid. Thus, a robust variable selection procedure is needed. We apply *esllasso* function to select important variables:
 ```{r}
-library(rvs)
-rvs1 <- rvs(X, Y)
-rvs1
+library(esllasso)
+esllasso1 <- esllasso(X, Y)
+esllasso1
 ```
 The estimated regression coefficients $(0.94, 1.58, 2.07, 0.95, 0.00, 0.00, 0.00, 0.00)$ are close to the true values$(1, 1.5, 2, 1, 0, 0, 0, 0)$. There is no mistaken selection or discard. 
 
-**rvs** package also provides generic *coef* function to extract estimated coefficients and *predict* function to make a prediction:
+**esllasso** package also provides generic *coef* function to extract estimated coefficients and *predict* function to make a prediction:
 ```{r}
-coef(rvs1)
-Y_pred <- predict(rvs1, X)
+coef(esllasso1)
+Y_pred <- predict(esllasso1, X)
 head(Y_pred)
 ```
 
@@ -101,15 +101,15 @@ lm_OLS <- lm(y ~ x - 1)
 plot(lm_OLS)
 ```
 
-The diagnostic plots suggest the residuals may not follow normal distribution, we use **rvs** to carry out variable selection with robustness.
+The diagnostic plots suggest the residuals may not follow normal distribution, we use **esllasso** to carry out variable selection with robustness.
 
 ```{r}
-# rvs
-rvs2 <- rvs(x, y)
-coef(rvs2)
+# esllasso
+esllasso2 <- esllasso(x, y)
+coef(esllasso2)
 ```
 
-In this example, **rvs** selected seven of the predictors while discarding six of them. Take a look at the correlations, it appears **rvs** tends to select variables which have higher correlations with the response.
+In this example, **esllasso** selected seven of the predictors while discarding six of them. Take a look at the correlations, it appears **esllasso** tends to select variables which have higher correlations with the response.
 ```{r}
 cor(x, y)
 ```
@@ -121,7 +121,7 @@ The following procedure roughly illustrates the robustness. Take the predictor r
 <center>
 
 ```{r, fig.align='center', fig.keep='all', echo=FALSE, eval=FALSE}
-beta <- rvs2$beta
+beta <- esllasso2$beta
 fun6 <- function(z) beta[6]*z 
 library(ggplot2)
 data6 <- data.frame(medv=y, rm=x[,6])
@@ -135,7 +135,7 @@ ggsave(p, filename = "boston.jpg", height = 3.6, width = 3.6)
 
 ```{r, eval=FALSE, echo=FALSE}
 for (i in 1:13) {
-  beta <- rvs2$beta
+  beta <- esllasso2$beta
 fun <- function(z) beta[i]*z 
 library(ggplot2)
 data <- data.frame(y=y, x=x[,i])

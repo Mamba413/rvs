@@ -1,4 +1,4 @@
-Package: rvs
+Package: esllasso
 Type: Package
 Title: Robust Variable Selection with Exponential Squared Loss
 Description: Computationally efficient tool for performing variable selection and obtaining robust estimates, which implements robust variable selection procedure proposed by Wang, X., Jiang, Y., Wang, S., Zhang, H. (2013) <doi:10.1080/01621459.2013.766613>. Users can enjoy the near optimal, consistent, and oracle properties of the procedures. 

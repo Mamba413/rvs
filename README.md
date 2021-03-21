@@ -1,9 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rvs
+# esllasso
 
-The goal of rvs is to carry out robust variable selection through
+The goal of esllasso is to carry out robust variable selection through
 exponential squared loss. Specifically, it solves the following
 optimization problem:
 
@@ -18,11 +18,11 @@ optimization problem.
 
 <!-- ## Installation -->
 
-<!-- You can install the released version of rvs from [CRAN](https://CRAN.R-project.org) with: -->
+<!-- You can install the released version of esllasso from [CRAN](https://CRAN.R-project.org) with: -->
 
 <!-- ``` r -->
 
-<!-- install.packages("rvs") -->
+<!-- install.packages("esllasso") -->
 
 <!-- ``` -->
 
@@ -50,11 +50,11 @@ err <- rnorm(n=N,mean=mus[components],sd=sds[components])
 Y <- X %*% beta_true + err
 ```
 
-We apply *rvs* function to select important variables:
+We apply *esllasso* function to select important variables:
 ```
-library(rvs)
-rvs1 <- rvs(X, Y)
-rvs1
+library(esllasso)
+esllasso1 <- esllasso(X, Y)
+esllasso1
 #> $beta
 #> [1] 0.9411568 1.5839011 2.0716890 0.9489619 0.0000000 0.0000000 0.0000000
 #> [8] 0.0000000

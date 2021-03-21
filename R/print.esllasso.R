@@ -1,15 +1,15 @@
-#' Print method for a "rvs" object
+#' Print method for a "esllasso" object
 #'
-#' Print the primary elements of the "\code{rvs}" object.
+#' Print the primary elements of the "\code{esllasso}" object.
 #'
-#' @param x A "\code{rvs}" object.
+#' @param x A "\code{esllasso}" object.
 #' @param ... Additional print arguments.
 #' 
-#' @return print a \code{rvs} object.
+#' @return print a \code{esllasso} object.
 #' 
 #' @export
 #'
-print.rvs <- function(x, ...){
+print.esllasso <- function(x, ...){
   out <- list(
     beta = x[["beta"]],
     alpha = x[["alpha"]],
