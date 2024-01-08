@@ -11,6 +11,8 @@ Authors@R: c(
     person(given = "Xueqin", family = "Wang", email = "wangxq20@ustc.edu.cn", role = c("aut"), comment = c(ORCID = "0000-0001-5205-9950")))
 Maintainer: Jin Zhu <zhuj37@mail2.sysu.edu.cn>
 Imports: MASS, matrixStats
+BugReports: https://github.com/Mamba413/rvs/issues
+URL: https://github.com/Mamba413/rvs
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
